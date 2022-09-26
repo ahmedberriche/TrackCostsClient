@@ -5,6 +5,11 @@ const costSchema = mongoose.Schema({
   CAC40: { type: Number },
   NASDAQ: { type: Number },
   dateTime: { type: Date },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "user",
+  },
 });
 
 module.exports = mongoose.model("Cost", costSchema);

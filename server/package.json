@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "dev": "env-cmd ./config/dev.env nodemon server.js"
+    "dev": "nodemon server.js"
   },
   "keywords": [
     "node",
@@ -18,8 +18,9 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
+    "dotenv": "^16.0.2",
     "express": "^4.16.2",
-    "jsonwebtoken": "^8.1.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.11",
     "morgan": "^1.9.0",
     "multer": "^1.3.0"

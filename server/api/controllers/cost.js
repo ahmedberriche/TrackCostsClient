@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 const Cost = require("../models/cost");
 
 exports.costs_get_all = (req, res, next) => {
-  Cost.find()
-    .select("CAC40 NASDAQ _id dateTime")
+  Cost.find({ userId: req.user.user_id })
+    //  .select("CAC40 NASDAQ _id dateTime")
     .sort({ _id: -1 })
     .limit(20)
     .exec()
@@ -15,6 +15,7 @@ exports.costs_get_all = (req, res, next) => {
             CAC40: doc.CAC40,
             NASDAQ: doc.NASDAQ,
             dateTime: doc.dateTime,
+            userId: doc?.userId,
             _id: doc._id,
           };
         }),
@@ -35,6 +36,7 @@ exports.costs_create_cost = (req, res, next) => {
     CAC40: req.body.CAC40,
     NASDAQ: req.body.NASDAQ,
     dateTime: req.body.dateTime,
+    userId: req.user.user_id,
   });
   cost
     .save()
@@ -54,7 +56,7 @@ exports.costs_create_cost = (req, res, next) => {
 
 exports.costs_get_cost = (req, res, next) => {
   const id = req.params.costId;
-  Cost.findById(id)
+  Cost.findOne({ _id: id, userId: req.user.user_id })
     .select("_id dateTime NASDAQ CAC40")
     .exec()
     .then((doc) => {
@@ -64,9 +66,7 @@ exports.costs_get_cost = (req, res, next) => {
           cost: doc,
         });
       } else {
-        res
-          .status(404)
-          .json({ message: "No valid entry found for provided ID" });
+        res.status(404).json({ message: "No found cost !" });
       }
     })
     .catch((err) => {
