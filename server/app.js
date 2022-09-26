@@ -4,19 +4,9 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
 const costsRoutes = require("./api/routes/cost");
 const userRoutes = require("./api/routes/user");
 
-// mongoose.connect(
-//   "mongodb+srv://hp:" +
-//     "hp" +
-//     "@cluster0.p9f6m4l.mongodb.net/?retryWrites=true&w=majority",
-//   {
-//     useNewUrlParser: true,
-//   }
-// );
-// mongoose.Promise = global.Promise;
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

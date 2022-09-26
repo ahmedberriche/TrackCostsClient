@@ -82,3 +82,29 @@ exports.user_login = async (req, res) => {
     console.log(err);
   }
 };
+
+exports.get_users = async (req, res, next) => {
+  User.find()
+    .exec()
+    .then((users) => {
+      const response = {
+        count: users.length,
+        users: users.map((user) => {
+          return {
+            first_name: user?.first_name,
+            last_name: user?.last_name,
+            id: user._id,
+            email: user?.email,
+          };
+        }),
+      };
+
+      res.status(200).json(response);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
+    });
+};
