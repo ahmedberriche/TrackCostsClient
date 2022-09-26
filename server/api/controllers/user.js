@@ -34,13 +34,23 @@ exports.create_user = async (req, res, next) => {
     // Create token
     const token = jwt.sign(
       { user_id: user._id, email },
-      process.env.TOKEN_KEY,
+      process.env.ACCESS_TOKEN_KEY,
       {
         expiresIn: "2h",
       }
     );
+    // create refresh token
+    const refreshToken = jwt.sign(
+      {
+        user_id: user._id,
+      },
+      process.env.REFRESH_TOKEN_KEY,
+      { expiresIn: "1d" }
+    );
+
     // save user token
     user.token = token;
+    user.refreshToken = refreshToken;
 
     // return new user
     res.status(201).json(user);
@@ -65,14 +75,23 @@ exports.user_login = async (req, res) => {
       // Create token
       const token = jwt.sign(
         { user_id: user._id, email },
-        process.env.TOKEN_KEY,
+        process.env.ACCESS_TOKEN_KEY,
         {
-          expiresIn: "2h",
+          expiresIn: "10m",
         }
+      );
+      // create refresh token
+      const refreshToken = jwt.sign(
+        {
+          user_id: user._id,
+        },
+        process.env.REFRESH_TOKEN_KEY,
+        { expiresIn: "1w" }
       );
 
       // save user token
       user.token = token;
+      user.refresh_token = refreshToken;
 
       // user
       res.status(200).json(user);
@@ -107,4 +126,37 @@ exports.get_users = async (req, res, next) => {
         error: err,
       });
     });
+};
+
+// refresh token
+
+exports.refresh_token = async (req, res, next) => {
+  if (req.body.refresh_token) {
+    // Destructuring refreshToken from cookie
+    const refreshToken = req.body.refresh_token;
+
+    // Verifying refresh token
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY, (err, decoded) => {
+      let user = decoded;
+      if (err) {
+        // Wrong Refesh Token
+        return res.status(406).json({ message: "Unauthorized" });
+      } else {
+        // Correct token we send a new access token
+        const accessToken = jwt.sign(
+          {
+            username: user._id,
+            email: user.email,
+          },
+          process.env.ACCESS_TOKEN_KEY,
+          {
+            expiresIn: "10m",
+          }
+        );
+        return res.json({ accessToken });
+      }
+    });
+  } else {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
 };
