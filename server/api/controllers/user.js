@@ -92,7 +92,6 @@ exports.user_login = async (req, res) => {
       // save user token
       user.token = token;
       user.refresh_token = refreshToken;
-
       // user
       res.status(200).json(user);
     }
@@ -140,7 +139,7 @@ exports.refresh_token = async (req, res, next) => {
       let user = decoded;
       if (err) {
         // Wrong Refesh Token
-        return res.status(406).json({ message: "Unauthorized" });
+        return res.status(401).json({ message: "Unauthorized" });
       } else {
         // Correct token we send a new access token
         const accessToken = jwt.sign(

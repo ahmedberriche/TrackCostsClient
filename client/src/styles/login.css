@@ -1,0 +1,56 @@
+.login__container {
+  max-width: 80%;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.login__card {
+  background: #cedbf0;
+  padding: 15px 15px;
+  border-radius: 10px;
+  min-height: 100px;
+  max-width: 600px;
+  width: 600px;
+  height: 400px;
+}
+
+.input {
+  outline: none !important;
+  border: 1px solid grey !important;
+  border-radius: 20px !important;
+}
+.input :focus {
+  outline: none !important;
+}
+
+form#basic {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.login__submitBtn {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.login__alert-box {
+  max-width: 600px;
+  width: 600px;
+  margin-bottom: 10px !important;
+}
+/* Extra Small Devices, Phones */
+@media only screen and (max-width: 480px) {
+  .login__card,
+  .login__alert-box {
+    width: 100%;
+  }
+}
